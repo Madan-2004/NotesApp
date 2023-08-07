@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Notes App</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1> <img src="images/notes.png" /> Notes</h1>
+        <button id="create-notes" onclick="create();"><img src="images/edit.png" /> Create!</button>
+        <div class="text" id="text">
+            <!-- <p contenteditable="true" class="textarea">
+                <img src="images/delete.png" onclick="deleteNotes();"/>
+            </p> -->
+        </div>
+    </div>
+
+    <script>
+        var text = document.getElementById("text");
+        var notes = document.querySelectorAll(".textarea");
+
+        function create(){
+            var notes = document.createElement("p");
+            var img = document.createElement("img");
+            notes.className = "textarea";
+            notes.setAttribute("contenteditable", "true");
+            img.src = "images/delete.png";
+            text.appendChild(notes).appendChild(img);   
+        }
+
+        text.addEventListener("click", (e) => {
+            if(e.target.tagName == "IMG"){
+                e.target.parentElement.remove();
+                saveData();
+            }
+            else if(e.target.tagName === "P"){
+                notes = document.querySelectorAll(".textarea");
+                notes.forEach(n => {
+                    n.onkeyup = function(){
+                        saveData();
+                    }
+                })
+            }
+        })
+
+        document.addEventListener("keydown", event => {
+            if(event.key === "Enter"){
+                document.execCommand("insertLineBreak");
+                event.preventDefault();
+            }
+        })
+
+        function saveData(){
+            localStorage.setItem("data", text.innerHTML);
+        }
+
+        function showData(){
+            text.innerHTML = localStorage.getItem("data");
+        }
+
+        showData();
+        // localStorage.clear();
+
+    </script>
+
+    <!-- document.addEventListener("keydown", e => {
+        if(e.key === "Enter"){
+            document.execCommand("insertLineBreak");
+            e.preventDefault();
+        }
+    }) -->
+
+</body>
+</html>
